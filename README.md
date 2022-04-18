@@ -8,35 +8,25 @@ Reference `origam-ftp` package in your **Origam** project, add the compiled dlls
  `Origam.ServerCore.deps.json`.
 ```json
 # add this to targets
-"FluentFTP/32.3.1": {
-    "dependencies": {
-      "System.Console": "4.3.0",
-      "System.IO": "4.3.0",
-      "System.Net.NameResolution": "4.3.0",
-      "System.Net.Security": "4.3.0",
-      "System.Net.Sockets": "4.3.0",
-      "System.Runtime": "4.3.0",
-      "System.Threading.Tasks": "4.3.0",
-      "System.Threading.Thread": "4.3.0"
-    },
-    "runtime": {
-      "lib/netstandard2.0/FluentFTP.dll": {
-        "assemblyVersion": "32.3.1.0",
-        "fileVersion": "32.3.1.0"
-      }
-    },
-    "compile": {
-      "lib/netstandard2.0/FluentFTP.dll": {}
+"FluentFTP/37.0.2": {
+  "runtime": {
+    "lib/net5.0/FluentFTP.dll": {
+      "assemblyVersion": "37.0.2.0",
+      "fileVersion": "37.0.2.0"
     }
+  },
+  "compile": {
+    "lib/net5.0/FluentFTP.dll": {}
   }
+}
 ```
 ```json
 # add this to libraries
-"FluentFTP/32.3.1": {
+"FluentFTP/37.0.2": {
   "type": "package",
   "serviceable": true,
-  "sha512": "sha512-Worl3dtG1Kw7gHlNGIUZhJiEPZ5LytLhrMtdyBwlY0foR6/nRJg2dV5ZdFBLw0CNwQ2RxLlcrqnaiFDnG/wr2g==",
-  "path": "fluentftp/32.3.1",
-  "hashPath": "fluentftp.32.3.1.nupkg.sha512"
+  "sha512": "sha512-UW2svrugWPVK7g6heJjGbsWIBPhJHOtMmp1g4NijSTd3z8f+qxg8kv8cIzAWfxusjCRThIHpJts2PHjbg0SOKQ==",
+  "path": "fluentftp/37.0.2",
+  "hashPath": "fluentftp.37.0.2.nupkg.sha512"
 }
 ```
