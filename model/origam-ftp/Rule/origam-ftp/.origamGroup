@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:file xmlns:x="http://schemas.origam.com/model-persistence/1.0.0" xmlns:g="http://schemas.origam.com/Origam.Schema.SchemaItemGroup/6.0.0">
+  <g:group
+    x:id="081f22e7-f9d9-4f9b-a381-ee1cc4a5a545"
+    x:isFolder="true"
+    g:name="origam-ftp"
+    g:rootItemType="Rule" />
+</x:file>

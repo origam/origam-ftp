@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:file xmlns:x="http://schemas.origam.com/model-persistence/1.0.0" xmlns:g="http://schemas.origam.com/Origam.Schema.SchemaItemGroup/6.0.0">
+  <g:group
+    x:id="6140937c-874e-4f3c-b1e6-3b4f124a1bd0"
+    x:isFolder="true"
+    g:name="origam-ftp"
+    g:rootItemType="Transformation" />
+</x:file>
