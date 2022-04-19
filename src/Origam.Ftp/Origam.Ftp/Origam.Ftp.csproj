@@ -7,6 +7,7 @@
         <AssemblyVersion>1.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <Copyright>Advantage Solutions s. r. o.</Copyright>
     </PropertyGroup>
 
     <ItemGroup>
