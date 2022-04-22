@@ -39,22 +39,6 @@ public class FtpServiceAgent : IExternalServiceAgent
     public void Run()
     {
         var useSecuredConnection = true;
-        if(Parameters["Host"] is not string)
-        {
-            throw new InvalidCastException("Host is not string.");
-        }
-        if(Parameters["Username"] is not string)
-        {
-            throw new InvalidCastException("Username is not string.");
-        }
-        if(Parameters["Password"] is not string)
-        {
-            throw new InvalidCastException("Password is not string.");
-        }
-        if(Parameters["Path"] is not string)
-        {
-            throw new InvalidCastException("Path is not string.");
-        }
         if(Parameters["UseSecuredConnection"] is bool useSecuredConnectionParam)
         {
             useSecuredConnection = useSecuredConnectionParam;
@@ -62,11 +46,11 @@ public class FtpServiceAgent : IExternalServiceAgent
         Result = MethodName switch
         {
             "DownloadFile" => DownloadFile(
-                (string)Parameters["Host"]!,
+                Parameters.Get<string>("Host"),
                 useSecuredConnection,
-                (string)Parameters["Username"]!, 
-                (string)Parameters["Password"]!,
-                (string)Parameters["Path"]!),
+                Parameters.Get<string>("Username"),
+                Parameters.Get<string>("Password"),
+                Parameters.Get<string>("Path")),
             _ => throw new ArgumentOutOfRangeException(@"MethodName",
                 MethodName)
         };
