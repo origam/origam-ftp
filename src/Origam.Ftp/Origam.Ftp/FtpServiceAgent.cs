@@ -19,62 +19,73 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 #endregion
 
+using System;
 using System.Collections;
+using System.IO;
 using FluentFTP;
 using log4net;
 using Origam.Service.Core;
 
-namespace Origam.Ftp;
-
-public class FtpServiceAgent : IExternalServiceAgent
+namespace Origam.Ftp
 {
-    private static readonly ILog log = 
-        LogManager.GetLogger(typeof(FtpServiceAgent));
-
-    public object Result { get; private set; } = null!;
-    public Hashtable Parameters { get; } = new();
-    public string MethodName { get; set; } = null!;
-    public string TransactionId { get; set; } = null!;
-
-    public void Run()
+    public class FtpServiceAgent : IExternalServiceAgent
     {
-        var useSecuredConnection = true;
-        if(Parameters["UseSecuredConnection"] is bool useSecuredConnectionParam)
+        private static readonly ILog log =
+            LogManager.GetLogger(typeof(FtpServiceAgent));
+
+        public object Result { get; private set; }
+        public Hashtable Parameters { get; } = new Hashtable();
+        public string MethodName { get; set; }
+        public string TransactionId { get; set; }
+
+        public void Run()
         {
-            useSecuredConnection = useSecuredConnectionParam;
+            var useSecuredConnection = true;
+            if(Parameters["UseSecuredConnection"] 
+               is bool useSecuredConnectionParam)
+            {
+                useSecuredConnection = useSecuredConnectionParam;
+            }
+            switch (MethodName)
+            {
+                case "DownloadFile":
+                    Result = DownloadFile(
+                    Parameters.Get<string>("Host"),
+                    useSecuredConnection,
+                    Parameters.Get<string>("Username"),
+                    Parameters.Get<string>("Password"),
+                    Parameters.Get<string>("Path"));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(@"MethodName",
+                    MethodName);
+            }   
         }
-        Result = MethodName switch
+        private static object DownloadFile(
+            string host,
+            bool useSecuredConnection,
+            string username,
+            string password,
+            string path)
         {
-            "DownloadFile" => DownloadFile(
-                Parameters.Get<string>("Host"),
-                useSecuredConnection,
-                Parameters.Get<string>("Username"),
-                Parameters.Get<string>("Password"),
-                Parameters.Get<string>("Path")),
-            _ => throw new ArgumentOutOfRangeException(@"MethodName",
-                MethodName)
-        };
-    }
-    private static object DownloadFile(
-        string host, 
-        bool useSecuredConnection,
-        string username, 
-        string password, 
-        string path)
-    {
-        if(log.IsDebugEnabled)
-        {
-            log.DebugFormat(
-                "Downloading {0} from {1}.", path, host);
+            if(log.IsDebugEnabled)
+            {
+                log.DebugFormat(
+                    "Downloading {0} from {1}.", path, host);
+            }
+            using(var ftp = new FtpClient(host, username, password))
+            {
+                if(useSecuredConnection)
+                {
+                    ftp.EncryptionMode = FtpEncryptionMode.Explicit;
+                }
+                ftp.Connect();
+                using(var output = new MemoryStream())
+                {
+                    ftp.Download(output, path);
+                    return output.ToArray();
+                }
+            }
         }
-        using var ftp = new FtpClient(host, username, password);
-        using var output = new MemoryStream();
-        if(useSecuredConnection)
-        {
-            ftp.EncryptionMode = FtpEncryptionMode.Explicit;
-        }
-        ftp.Connect();
-        ftp.Download(output, path);
-        return output.ToArray();
     }
 }
