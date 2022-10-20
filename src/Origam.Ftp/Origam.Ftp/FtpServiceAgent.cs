@@ -41,7 +41,8 @@ namespace Origam.Ftp
         public void Run()
         {
             var useSecuredConnection = true;
-            if (Parameters["UseSecuredConnection"] is bool useSecuredConnectionParam)
+            if(Parameters["UseSecuredConnection"] 
+               is bool useSecuredConnectionParam)
             {
                 useSecuredConnection = useSecuredConnectionParam;
             }
@@ -67,20 +68,19 @@ namespace Origam.Ftp
             string password,
             string path)
         {
-            if (log.IsDebugEnabled)
+            if(log.IsDebugEnabled)
             {
                 log.DebugFormat(
                     "Downloading {0} from {1}.", path, host);
             }
-
-            using (FtpClient ftp = new FtpClient(host, username, password))
+            using(var ftp = new FtpClient(host, username, password))
             {
-                if (useSecuredConnection)
+                if(useSecuredConnection)
                 {
                     ftp.EncryptionMode = FtpEncryptionMode.Explicit;
                 }
                 ftp.Connect();
-                using (MemoryStream output = new MemoryStream())
+                using(var output = new MemoryStream())
                 {
                     ftp.Download(output, path);
                     return output.ToArray();
