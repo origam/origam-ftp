@@ -5,7 +5,7 @@ Supported **Origam** versions: 2022.1+.
 
 ## How to use
 Reference `origam-ftp` package in your **Origam** project, add the compiled dlls to the server instance folder and adjust 
- `Origam.ServerCore.deps.json`.
+ `Origam.ServerCore.deps.json` or `Origam.Server.deps.json` depending on used **Origam** version.
 ```json
 # add this to targets
 "FluentFTP/37.0.2": {
