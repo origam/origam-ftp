@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<x:file xmlns:x="http://schemas.origam.com/model-persistence/1.0.0" xmlns:asi="http://schemas.origam.com/Origam.Schema.AbstractSchemaItem/6.0.0" xmlns:sip="http://schemas.origam.com/Origam.Schema.SchemaItemParameter/6.0.0" xmlns:s="http://schemas.origam.com/Origam.Schema.WorkflowModel.Service/6.0.0" xmlns:sm="http://schemas.origam.com/Origam.Schema.WorkflowModel.ServiceMethod/6.0.0" xmlns:smp="http://schemas.origam.com/Origam.Schema.WorkflowModel.ServiceMethodParameter/6.0.0">
+<x:file
+  xmlns:x="http://schemas.origam.com/model-persistence/1.0.0"
+  xmlns:asi="http://schemas.origam.com/Origam.Schema.AbstractSchemaItem/6.0.0"
+  xmlns:s="http://schemas.origam.com/Origam.Schema.WorkflowModel.Service/6.0.0"
+  xmlns:sip="http://schemas.origam.com/Origam.Schema.SchemaItemParameter/6.0.0"
+  xmlns:sm="http://schemas.origam.com/Origam.Schema.WorkflowModel.ServiceMethod/6.0.0"
+  xmlns:smp="http://schemas.origam.com/Origam.Schema.WorkflowModel.ServiceMethodParameter/6.0.0">
   <s:Service
     asi:abstract="false"
     s:classPath="Origam.Ftp.FtpServiceAgent, Origam.Ftp"
@@ -36,20 +42,6 @@
         smp:allowWorkflowReference="false"
         smp:callElements="3"
         sip:dataType="String"
-        x:id="bda3f9ee-c858-47dc-ad0b-f45fea2a054e"
-        asi:name="Password" />
-      <smp:Parameter
-        asi:abstract="false"
-        smp:allowContextReference="true"
-        smp:allowDataConstantReference="true"
-        smp:allowDataStructureReference="false"
-        sip:allowNulls="false"
-        smp:allowReportReference="false"
-        smp:allowSystemFunctionCall="false"
-        smp:allowTransformationReference="false"
-        smp:allowWorkflowReference="false"
-        smp:callElements="3"
-        sip:dataType="String"
         x:id="44ccd709-9720-4d31-ba28-7ba518023dae"
         asi:name="Path" />
       <smp:Parameter
@@ -71,15 +63,29 @@
         smp:allowContextReference="true"
         smp:allowDataConstantReference="true"
         smp:allowDataStructureReference="false"
-        sip:allowNulls="true"
+        sip:allowNulls="false"
         smp:allowReportReference="false"
         smp:allowSystemFunctionCall="false"
         smp:allowTransformationReference="false"
         smp:allowWorkflowReference="false"
         smp:callElements="3"
-        sip:dataType="Boolean"
-        x:id="62f3e154-c5c0-4e72-a7c6-e1a2bf84e964"
-        asi:name="UseSecuredConnection" />
+        sip:dataType="String"
+        x:id="bda3f9ee-c858-47dc-ad0b-f45fea2a054e"
+        asi:name="Password" />
+      <smp:Parameter
+        asi:abstract="false"
+        smp:allowContextReference="true"
+        smp:allowDataConstantReference="true"
+        smp:allowDataStructureReference="false"
+        sip:allowNulls="false"
+        smp:allowReportReference="false"
+        smp:allowSystemFunctionCall="false"
+        smp:allowTransformationReference="false"
+        smp:allowWorkflowReference="false"
+        smp:callElements="3"
+        sip:dataType="String"
+        x:id="ca8178ea-429f-48b5-b0ee-50c13c8b6f71"
+        asi:name="Protocol" />
     </sm:ServiceMethod>
   </s:Service>
 </x:file>

@@ -25,11 +25,16 @@ using System.IO;
 using FluentFTP;
 using log4net;
 using Origam.Service.Core;
+using Renci.SshNet;
 
 namespace Origam.Ftp
 {
     public class FtpServiceAgent : IExternalServiceAgent
     {
+        private static readonly string Ftp = "FTP";
+        private static readonly string Ftps = "FTPS";
+        private static readonly string Sftp = "SFTP";
+        
         private static readonly ILog log =
             LogManager.GetLogger(typeof(FtpServiceAgent));
 
@@ -40,21 +45,15 @@ namespace Origam.Ftp
 
         public void Run()
         {
-            var useSecuredConnection = true;
-            if(Parameters["UseSecuredConnection"] 
-               is bool useSecuredConnectionParam)
-            {
-                useSecuredConnection = useSecuredConnectionParam;
-            }
             switch (MethodName)
             {
                 case "DownloadFile":
                     Result = DownloadFile(
-                    Parameters.Get<string>("Host"),
-                    useSecuredConnection,
-                    Parameters.Get<string>("Username"),
-                    Parameters.Get<string>("Password"),
-                    Parameters.Get<string>("Path"));
+                        protocol:Parameters.Get<string>("Protocol"),
+                        host:Parameters.Get<string>("Host"),
+                        username:Parameters.Get<string>("Username"),
+                        password:Parameters.Get<string>("Password"),
+                        path:Parameters.Get<string>("Path"));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(@"MethodName",
@@ -62,8 +61,8 @@ namespace Origam.Ftp
             }   
         }
         private static object DownloadFile(
+            string protocol,
             string host,
-            bool useSecuredConnection,
             string username,
             string password,
             string path)
@@ -71,11 +70,36 @@ namespace Origam.Ftp
             if(log.IsDebugEnabled)
             {
                 log.DebugFormat(
-                    "Downloading {0} from {1}.", path, host);
+                    "Downloading {0} from {1} via {2} protocol.", 
+                    path, host, protocol);
             }
+            if(string.Equals(protocol, Ftp, 
+                StringComparison.InvariantCultureIgnoreCase) 
+            || string.Equals(protocol, Ftps, 
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                return DownloadFileViaFtpClient(
+                    protocol, host, username, password, path);
+            }
+            if(string.Equals(protocol, Sftp, 
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                return DownloadFileViaSftpClient(
+                    host, username, password, path);
+            }
+            throw new Exception($"Protocol {protocol}is not supported.");
+        }
+
+        private static object DownloadFileViaFtpClient(
+            string protocol,
+            string host,
+            string username,
+            string password,
+            string path)
+        {
             using(var ftp = new FtpClient(host, username, password))
             {
-                if(useSecuredConnection)
+                if(protocol == Ftps)
                 {
                     ftp.EncryptionMode = FtpEncryptionMode.Explicit;
                 }
@@ -83,6 +107,23 @@ namespace Origam.Ftp
                 using(var output = new MemoryStream())
                 {
                     ftp.Download(output, path);
+                    return output.ToArray();
+                }
+            }
+        }
+
+        private static object DownloadFileViaSftpClient(
+            string host,
+            string username,
+            string password,
+            string path)
+        {
+            using(var sftp = new SftpClient(host, username, password))
+            {
+                sftp.Connect();
+                using(var output = new MemoryStream())
+                {
+                    sftp.DownloadFile(path, output);
                     return output.ToArray();
                 }
             }

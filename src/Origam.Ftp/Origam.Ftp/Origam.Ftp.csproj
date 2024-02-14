@@ -2,17 +2,18 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <AssemblyVersion>1.1.0</AssemblyVersion>
-        <FileVersion>1.1.0</FileVersion>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+        <FileVersion>2.0.0</FileVersion>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Copyright>Advantage Solutions s. r. o.</Copyright>
-        <PackageVersion>1.1.0</PackageVersion>
+        <PackageVersion>2.0.0</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentFTP" Version="37.0.2" />
-      <PackageReference Include="log4net" Version="2.0.14" />
+      <PackageReference Include="log4net" Version="2.0.15" />
       <PackageReference Include="Origam.Service.Core" Version="1.0.3" />
+      <PackageReference Include="SSH.NET" Version="2023.0.1" />
     </ItemGroup>
 
 </Project>
