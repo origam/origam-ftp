@@ -22,6 +22,7 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 using FluentFTP;
 using log4net;
 using Origam.Service.Core;
@@ -51,6 +52,7 @@ namespace Origam.Ftp
                     Result = DownloadFile(
                         protocol:Parameters.Get<string>("Protocol"),
                         host:Parameters.Get<string>("Host"),
+                        port:Parameters.TryGet<int?>("Port"),
                         username:Parameters.Get<string>("Username"),
                         password:Parameters.Get<string>("Password"),
                         path:Parameters.Get<string>("Path"));
@@ -63,29 +65,30 @@ namespace Origam.Ftp
         private static object DownloadFile(
             string protocol,
             string host,
+            int? port,
             string username,
             string password,
             string path)
         {
-            if(log.IsDebugEnabled)
+            if (log.IsDebugEnabled)
             {
                 log.DebugFormat(
                     "Downloading {0} from {1} via {2} protocol.", 
                     path, host, protocol);
             }
-            if(string.Equals(protocol, Ftp, 
+            if (string.Equals(protocol, Ftp, 
                 StringComparison.InvariantCultureIgnoreCase) 
             || string.Equals(protocol, Ftps, 
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 return DownloadFileViaFtpClient(
-                    protocol, host, username, password, path);
+                    protocol, host, port, username, password, path);
             }
-            if(string.Equals(protocol, Sftp, 
+            if (string.Equals(protocol, Sftp, 
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 return DownloadFileViaSftpClient(
-                    host, username, password, path);
+                    host, port, username, password, path);
             }
             throw new Exception($"Protocol {protocol}is not supported.");
         }
@@ -93,18 +96,21 @@ namespace Origam.Ftp
         private static object DownloadFileViaFtpClient(
             string protocol,
             string host,
+            int? port,
             string username,
             string password,
             string path)
         {
-            using(var ftp = new FtpClient(host, username, password))
+            using (var ftp = port == null 
+                       ? new FtpClient(host, username, password)
+                       : new FtpClient(host, port.Value, username, password))
             {
-                if(protocol == Ftps)
+                if (protocol == Ftps)
                 {
                     ftp.EncryptionMode = FtpEncryptionMode.Explicit;
                 }
                 ftp.Connect();
-                using(var output = new MemoryStream())
+                using (var output = new MemoryStream())
                 {
                     ftp.Download(output, path);
                     return output.ToArray();
@@ -114,14 +120,17 @@ namespace Origam.Ftp
 
         private static object DownloadFileViaSftpClient(
             string host,
+            int? port,
             string username,
             string password,
             string path)
         {
-            using(var sftp = new SftpClient(host, username, password))
+            using (var sftp = port == null 
+                       ? new SftpClient(host, username, password)
+                       : new SftpClient(host, port.Value, username, password))
             {
                 sftp.Connect();
-                using(var output = new MemoryStream())
+                using (var output = new MemoryStream())
                 {
                     sftp.DownloadFile(path, output);
                     return output.ToArray();
